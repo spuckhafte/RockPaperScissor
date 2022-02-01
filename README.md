@@ -1,2 +1,4 @@
 # RockPaperScissor
-Test RPS, with socket.io : Live RPS
+RPS, with socket.io : Live RPS
+On development
+*educational*
