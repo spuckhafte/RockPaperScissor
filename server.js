@@ -10,6 +10,7 @@ const io = require('socket.io')(http, {
 
 rooms = {}
 
+
 //eg: room = {1: [user1, user2], 2: [user3, user4]}
 
 io.on('connection', socket => {
@@ -44,11 +45,16 @@ io.on('connection', socket => {
 
     socket.on('activateRPS', roomStatus => {
         // emit rock, paper, scissors within a delay of 1 second
-        socket.emit('rps', [roomStatus, 'rock'])
-        sleep(1000).then(() => {
-            socket.emit('rps', [roomStatus, 'paper'])
+        sleep(3000).then(() => {
+            socket.emit('rps', [roomStatus, 'rock'])
             sleep(1000).then(() => {
-                socket.emit('rps', [roomStatus, 'scissors'])
+                socket.emit('rps', [roomStatus, 'paper'])
+                sleep(1000).then(() => {
+                    socket.emit('rps', [roomStatus, 'scissors'])
+                    sleep(600).then(() => {
+                        socket.emit('timeOver', roomStatus)
+                    })
+                })
             })
         })
     })
