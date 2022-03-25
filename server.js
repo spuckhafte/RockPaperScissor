@@ -77,17 +77,15 @@ io.on('connection', socket => {
             if (afterResponse.some(res => Object.keys(res).includes(partnerId))) {
                 afterResponse.forEach((res, index) => {
                     if (Object.keys(res).includes(partnerId)) {
-                        let room = findRoomWithId(rooms, partnerId);
-                        let partnerRes = room.indexOf(res[partnerId]) === 0 ? userRes : res[partnerId];
-                        userRes = room.indexOf(res[partnerId]) === 0 ? res[partnerId] : userRes;
+                        let partnerRes = res[partnerId];
                         afterResponse.splice(index, 1);
                         if (userRes !== null && partnerRes !== null && userRes !== undefined && partnerRes !== undefined) {
                             if (userRes == partnerRes) {
                                 io.emit('rps-result', ['draw', userRes, userId, partnerId]);
                             } else if (userRes == 'rock' && partnerRes == 'scissors' || userRes == 'scissors' && partnerRes == 'paper' || userRes == 'paper' && partnerRes == 'rock') {
-                                io.emit('rps-result', [['win', partnerId, partnerRes], ['lose', userId, userRes]])
+                                io.emit('rps-result', [['win', userId, userRes], ['lose', partnerId, partnerId]])
                             } else {
-                                io.emit('rps-result', [['win', userId, userRes], ['lose', partnerId, partnerRes]])
+                                io.emit('rps-result', [['win', partnerId, partnerRes], ['lose', userId, userRes]])
                             }
                             io.emit('reset', userId, false);
                             io.emit('reset', partnerId, false);
