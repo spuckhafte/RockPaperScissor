@@ -56,7 +56,7 @@ io.on('connection', socket => {
                         socket.emit('rps', [roomStatus, 'scissors'])
                         sleep(600).then(() => {
                             socket.emit('rps', [roomStatus, 'SHOOT!!!'])
-                            sleep(800).then(() => {
+                            sleep(4000).then(() => {
                                 socket.emit('rps', [roomStatus, 'done'])
                             })
                         })
@@ -82,8 +82,8 @@ io.on('connection', socket => {
                         if (userRes !== null && partnerRes !== null && userRes !== undefined && partnerRes !== undefined) {
                             if (userRes == partnerRes) {
                                 io.emit('rps-result', ['draw', userRes, userId, partnerId]);
-                            } else if (userRes == 'rock' && partnerRes == 'scissors' || userRes == 'scissors' && partnerRes == 'paper' || userRes == 'paper' && partnerRes == 'rock') {
-                                io.emit('rps-result', [['win', userId, userRes], ['lose', partnerId, partnerId]])
+                            } else if (userRes == 'r' && partnerRes == 's' || userRes == 's' && partnerRes == 'p' || userRes == 'p' && partnerRes == 'r') {
+                                io.emit('rps-result', [['win', userId, userRes], ['lose', partnerId, partnerRes]])
                             } else {
                                 io.emit('rps-result', [['win', partnerId, partnerRes], ['lose', userId, userRes]])
                             }
