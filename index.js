@@ -1,4 +1,4 @@
-const socket = io.connect('http://localhost:3089');
+const socket = io.connect('https://3821-223-233-69-150.ngrok.io');
 
 let player = document.getElementById('you');
 let rival = document.getElementById('partner');
