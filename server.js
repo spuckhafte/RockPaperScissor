@@ -56,7 +56,7 @@ io.on('connection', socket => {
                         socket.emit('rps', [roomStatus, 'scissors'])
                         sleep(600).then(() => {
                             socket.emit('rps', [roomStatus, 'SHOOT!!!'])
-                            sleep(600).then(() => {
+                            sleep(4000).then(() => {
                                 socket.emit('rps', [roomStatus, 'done'])
                             })
                         })
@@ -77,15 +77,17 @@ io.on('connection', socket => {
             if (afterResponse.some(res => Object.keys(res).includes(partnerId))) {
                 afterResponse.forEach((res, index) => {
                     if (Object.keys(res).includes(partnerId)) {
-                        let partnerRes = res[partnerId];
+                        let room = findRoomWithId(rooms, partnerId);
+                        let partnerRes = room.indexOf(res[partnerId]) === 0 ? userRes : res[partnerId];
+                        userRes = room.indexOf(res[partnerId]) === 0 ? res[partnerId] : userRes;
                         afterResponse.splice(index, 1);
-                        if (userRes !== null && partnerRes !== null) {
+                        if (userRes !== null && partnerRes !== null && userRes !== undefined && partnerRes !== undefined) {
                             if (userRes == partnerRes) {
                                 io.emit('rps-result', ['draw', userRes, userId, partnerId]);
                             } else if (userRes == 'rock' && partnerRes == 'scissors' || userRes == 'scissors' && partnerRes == 'paper' || userRes == 'paper' && partnerRes == 'rock') {
-                                io.emit('rps-result', [['lose', partnerId, partnerRes], ['win', userId, userRes]])
+                                io.emit('rps-result', [['win', partnerId, partnerRes], ['lose', userId, userRes]])
                             } else {
-                                io.emit('rps-result', [['lose', userId, userRes], ['win', partnerId, partnerRes]])
+                                io.emit('rps-result', [['win', userId, userRes], ['lose', partnerId, partnerRes]])
                             }
                             io.emit('reset', userId, false);
                             io.emit('reset', partnerId, false);

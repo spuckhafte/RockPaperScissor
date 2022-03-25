@@ -45,7 +45,10 @@ socket.on('reset', (userId, all, query, query2) => {
     // socket.emit('test', comparison)
     if (socket.id === userId) {
         displayRPS.innerHTML = '';
-        if (all) resultDiv.innerHTML = '';
+        if (all) {
+            resultDiv.innerHTML = '';
+            resultDiv.className = 'result';
+        }
         if (query === 'restart') socket.emit('activateRPS', query2);
     }
 })
