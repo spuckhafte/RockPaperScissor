@@ -50,13 +50,13 @@ io.on('connection', socket => {
             socket.emit('reset', socket.id, true);
             sleep(1000).then(() => {
                 socket.emit('rps', [roomStatus, 'rock'])
-                sleep(800).then(() => {
+                sleep(600).then(() => {
                     socket.emit('rps', [roomStatus, 'paper'])
-                    sleep(800).then(() => {
+                    sleep(600).then(() => {
                         socket.emit('rps', [roomStatus, 'scissors'])
-                        sleep(800).then(() => {
+                        sleep(600).then(() => {
                             socket.emit('rps', [roomStatus, 'SHOOT!!!'])
-                            sleep(5000).then(() => {
+                            sleep(600).then(() => {
                                 socket.emit('rps', [roomStatus, 'done'])
                             })
                         })
