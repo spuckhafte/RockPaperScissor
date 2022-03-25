@@ -25,7 +25,6 @@ const dict = {
 socket.on('rps', rps => {
     let roomStatus = rps[0]
     let rpsStatus = rps[1]
-    console.log(roomStatus)
     if (rpsStatus === 'done') {
         if (info.className === 'interact') return;
         info.className = 'interact';
