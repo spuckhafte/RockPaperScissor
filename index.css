@@ -1,0 +1,63 @@
+body {
+    font-family: cursive;
+}
+
+#you {
+    color: yellow;
+    font-size: large;
+}
+
+#partner {
+    font-size: large;
+}
+
+#you::before {
+    content: 'You: ';
+    color: rgb(16, 201, 16);
+}
+
+
+#partner::before {
+    content: 'Rival: ';
+    color: red;
+}
+
+.interact button {
+    width: 50px;
+    height: 50px;
+    border-radius: 10%;
+    font-size: large;
+    font-weight: bold;
+    background-color: gray;
+    margin-top: 10px;
+    cursor: not-allowed;
+    margin-inline: 5px;
+}
+.noblock button {
+    background-color: white;
+    cursor: pointer !important;
+}
+.noblock button:hover {
+    background-color: #00ff00;
+}
+
+small {
+    color: gray;
+    font-size: medium;
+    margin-left: 5px;
+    font-weight: bolder;
+}
+
+small::before { content: '( select one, when it says ' }
+
+small::after {
+    content: ' SHOOT )';
+}
+
+.result {
+    font-size: larger;
+}
+
+.won { color: greenyellow; }
+.lost { color: rgb(255, 111, 111); }
+.tie { color: rgb(217, 159, 255) !important; }

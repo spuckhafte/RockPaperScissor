@@ -8,7 +8,8 @@ const io = require('socket.io')(http, {
 
 // 1-> engaged, 0-> alone
 
-rooms = {}
+let rooms = {};
+let afterResponse = [];
 
 
 //eg: room = {1: [user1, user2], 2: [user3, user4]}
@@ -45,21 +46,69 @@ io.on('connection', socket => {
 
     socket.on('activateRPS', roomStatus => {
         // emit rock, paper, scissors within a delay of 1 second
-        sleep(3000).then(() => {
-            socket.emit('rps', [roomStatus, 'rock'])
+        sleep(50).then(() => {
+            socket.emit('reset', socket.id, true);
             sleep(1000).then(() => {
-                socket.emit('rps', [roomStatus, 'paper'])
-                sleep(1000).then(() => {
-                    socket.emit('rps', [roomStatus, 'scissors'])
-                    sleep(600).then(() => {
-                        socket.emit('timeOver', roomStatus)
+                socket.emit('rps', [roomStatus, 'rock'])
+                sleep(800).then(() => {
+                    socket.emit('rps', [roomStatus, 'paper'])
+                    sleep(800).then(() => {
+                        socket.emit('rps', [roomStatus, 'scissors'])
+                        sleep(800).then(() => {
+                            socket.emit('rps', [roomStatus, 'SHOOT!!!'])
+                            sleep(5000).then(() => {
+                                socket.emit('rps', [roomStatus, 'done'])
+                            })
+                        })
                     })
                 })
             })
         })
     })
 
-    socket.on('test', test => { console.log(`${test}, test`) });
+    socket.on('rps-action', (userRes, userId) => {
+        let roomNo = findRoomWithId(rooms, userId);
+        let partnerId = rooms[roomNo].filter(id => id !== userId)[0];
+        if (partnerId === undefined) {
+            delete rooms[roomNo];
+            joinAloneUsers(userId);
+            io.emit('reset', userId);
+        } else {
+            if (afterResponse.some(res => Object.keys(res).includes(partnerId))) {
+                afterResponse.forEach((res, index) => {
+                    if (Object.keys(res).includes(partnerId)) {
+                        let partnerRes = res[partnerId];
+                        afterResponse.splice(index, 1);
+                        if (userRes !== null && partnerRes !== null) {
+                            if (userRes == partnerRes) {
+                                io.emit('rps-result', ['draw', userRes, userId, partnerId]);
+                            } else if (userRes == 'rock' && partnerRes == 'scissors' || userRes == 'scissors' && partnerRes == 'paper' || userRes == 'paper' && partnerRes == 'rock') {
+                                io.emit('rps-result', [['lose', partnerId, partnerRes], ['win', userId, userRes]])
+                            } else {
+                                io.emit('rps-result', [['lose', userId, userRes], ['win', partnerId, partnerRes]])
+                            }
+                            io.emit('reset', userId, false);
+                            io.emit('reset', partnerId, false);
+                        } else {
+                            io.emit('rps-result', ['No Response', userId, partnerId]);
+                            io.emit('reset', userId, false);
+                            io.emit('reset', partnerId, false);
+                            sleep(2000).then(() => {
+                                let status = createStatus(1, userId, partnerId);
+                                io.emit('reset', userId, true, 'restart', status);
+                                io.emit('reset', partnerId, true, 'restart', status);
+                            });
+                        }
+                    }
+                })
+            } else {
+                let res = {};
+                res[userId] = userRes;
+                afterResponse.push(res);
+            }
+        }
+    });
+
 });
 
 http.listen(3089, () => { console.log('listening on *:3089') });
@@ -94,8 +143,8 @@ function findEmptyRoom(room) {
     }
 }
 
-function findRoomWithId(room, id) {
-    let roomNo = Object.keys(room).find(key => room[key].includes(id));
+function findRoomWithId(rooms, id) {
+    let roomNo = Object.keys(rooms).find(key => rooms[key].includes(id));
     if (roomNo !== undefined) {
         return roomNo;
     }
@@ -103,7 +152,6 @@ function findRoomWithId(room, id) {
 
 function joinAloneUsers(userId) {
     let roomNo = findEmptyRoom(rooms);
-    // socket.on('test', test => { console.log(roomNo); });
     if (roomNo !== null) {
         rooms[roomNo].push(userId);
         const roomStatus = createStatus(1, rooms[roomNo][0], userId);

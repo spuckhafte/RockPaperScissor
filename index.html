@@ -5,16 +5,22 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://cdn.socket.io/socket.io-3.0.0.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <link rel="stylesheet" href="index.css">
         <title>Document</title>
     </head>
 
     <body style="background-color: black;color: whitesmoke;">
         <h4 id="you"></h4>
         <h4 id="partner"></h4>
-        <br>
-        <h4 id="instr" style="display:none">choose <b>R</b>, <b>P</b> or <b>S</b> using keys, when it says "Scissors"
-        </h4>
+        <small></small>
+        <div class="interact">
+            <button onclick="action(this)" id="r">R</button><button onclick="action(this)" id="p">P</button><button
+                onclick="action(this)" id="s">S</button>
+        </div>
         <h4 id="rps"></h4>
+        <h4 class="result" id="result-id"></h4>
+        <!-- <h4 class="retry">You Lost</h4> -->
         <script src="index.js"></script>
     </body>
 
