@@ -3,7 +3,7 @@ const http = require('http').createServer();
 const { v4: uuidv4 } = require('uuid');
 
 const io = require('socket.io')(http, {
-    cors: '*'
+    cors: { origin: '*' }
 });
 
 // 1-> engaged, 0-> alone
