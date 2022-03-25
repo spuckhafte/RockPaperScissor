@@ -56,7 +56,7 @@ io.on('connection', socket => {
                         socket.emit('rps', [roomStatus, 'scissors'])
                         sleep(600).then(() => {
                             socket.emit('rps', [roomStatus, 'SHOOT!!!'])
-                            sleep(4000).then(() => {
+                            sleep(800).then(() => {
                                 socket.emit('rps', [roomStatus, 'done'])
                             })
                         })
