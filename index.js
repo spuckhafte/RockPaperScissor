@@ -1,4 +1,4 @@
-const socket = io.connect('/');
+const socket = io.connect('https://liverps.herokuapp.com/');
 
 let player = document.getElementById('you');
 let rival = document.getElementById('partner');
