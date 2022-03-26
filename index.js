@@ -1,4 +1,4 @@
-const socket = io.connect('https://3821-223-233-69-150.ngrok.io');
+const socket = io.connect('https://564c-223-233-73-249.ngrok.io');
 
 let player = document.getElementById('you');
 let rival = document.getElementById('partner');
