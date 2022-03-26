@@ -56,7 +56,7 @@ io.on('connection', socket => {
                         socket.emit('rps', [roomStatus, 'scissors'])
                         sleep(600).then(() => {
                             socket.emit('rps', [roomStatus, 'SHOOT!!!'])
-                            sleep(4000).then(() => {
+                            sleep(800).then(() => {
                                 socket.emit('rps', [roomStatus, 'done'])
                             })
                         })
@@ -111,7 +111,8 @@ io.on('connection', socket => {
 
 });
 
-http.listen(3089, () => { console.log('listening on *:3089') });
+const port = process.env.PORT || 3089;
+http.listen(port, () => { console.log('listening on *:' + port) });
 
 
 function createStatus(query, userId, partnerId) {
